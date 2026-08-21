@@ -1,0 +1,268 @@
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loterías RD — Resultados, estadísticas e historial</title>
+<meta name="description" content="Portal de resultados de loterías de República Dominicana con estadísticas, historial, buscador y análisis.">
+<style>
+:root{
+  --bg:#f4f7fb;--card:#fff;--text:#14213d;--muted:#64748b;--primary:#0f766e;
+  --primary2:#14b8a6;--gold:#f59e0b;--line:#e2e8f0;--danger:#dc2626;
+  --shadow:0 12px 35px rgba(15,23,42,.08);--radius:18px
+}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+a{color:inherit}.container{width:min(1180px,92%);margin:auto}
+header{background:linear-gradient(135deg,#062e2b,#0f766e 55%,#14b8a6);color:white;position:sticky;top:0;z-index:20;box-shadow:0 8px 25px rgba(0,0,0,.14)}
+.nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-size:22px;font-weight:900;letter-spacing:-.5px}.logo span{color:#fde68a}
+nav{display:flex;gap:18px;flex-wrap:wrap}nav a{text-decoration:none;font-weight:700;font-size:14px;opacity:.95}
+.hero{padding:54px 0 38px;background:linear-gradient(180deg,#e6fffb 0%,var(--bg) 100%)}
+.hero-grid{display:grid;grid-template-columns:1.4fr .8fr;gap:28px;align-items:center}
+.eyebrow{display:inline-block;background:#ccfbf1;color:#115e59;border-radius:999px;padding:8px 12px;font-weight:800;font-size:12px}
+h1{font-size:clamp(34px,5vw,58px);line-height:1.02;margin:16px 0 14px;letter-spacing:-2px}
+.hero p{font-size:18px;color:#475569;max-width:720px}
+.datebox{background:var(--card);padding:22px;border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--line)}
+.datebox strong{display:block;font-size:27px;margin:8px 0}.live{color:#047857;font-weight:800;font-size:13px}
+.toolbar{margin-top:-10px}.filters{display:flex;gap:12px;flex-wrap:wrap;background:var(--card);padding:15px;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+input,select,button{font:inherit}input,select{border:1px solid #cbd5e1;border-radius:11px;padding:11px 13px;background:#fff;color:var(--text)}
+button{border:0;border-radius:11px;padding:11px 16px;background:var(--primary);color:#fff;font-weight:800;cursor:pointer}
+button.secondary{background:#e2e8f0;color:#0f172a}
+section{padding:34px 0}.section-title{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:18px}
+h2{margin:0;font-size:28px}.muted{color:var(--muted);font-size:14px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.stat{background:var(--card);padding:20px;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.stat small{color:var(--muted);font-weight:700}.stat strong{display:block;font-size:30px;margin-top:6px}.up{color:#047857;font-size:13px;font-weight:800}
+.lottery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.lottery{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.lot-head{padding:18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.badge{background:#ecfeff;color:#155e75;border-radius:999px;padding:5px 8px;font-size:11px;font-weight:900}
+.results{padding:17px}.draw{padding:13px 0;border-bottom:1px solid var(--line)}.draw:last-child{border-bottom:0}.draw-top{display:flex;justify-content:space-between;gap:8px}.draw-name{font-weight:850}.time{font-size:12px;color:var(--muted)}
+.numbers{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.ball{width:39px;height:39px;border-radius:50%;display:grid;place-items:center;background:#f1f5f9;border:2px solid #cbd5e1;font-weight:900}.ball.main{background:#ccfbf1;border-color:#5eead4;color:#115e59}
+.tablewrap{overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+table{width:100%;border-collapse:collapse;min-width:700px}th,td{padding:14px;text-align:left;border-bottom:1px solid var(--line)}th{background:#f8fafc;font-size:12px;text-transform:uppercase;color:#64748b}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{padding:8px 11px;background:#fff;border:1px solid var(--line);border-radius:999px;font-weight:800}.hot{background:#fff7ed;border-color:#fed7aa;color:#9a3412}
+.chart{background:var(--card);padding:20px;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}canvas{width:100%;height:270px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.notice{padding:15px 17px;background:#fffbeb;border:1px solid #fde68a;border-radius:14px;color:#78350f;font-size:13px}
+footer{background:#0f172a;color:#cbd5e1;padding:35px 0;margin-top:30px}.footergrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}.footer-title{color:#fff;font-weight:900;margin-bottom:10px}
+@media(max-width:900px){.hero-grid,.two{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}.lottery-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){nav{display:none}.cards,.lottery-grid{grid-template-columns:1fr}.hero{padding-top:35px}.datebox{margin-top:8px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <div class="logo">Loterías <span>RD</span></div>
+    <nav><a href="#resultados">Resultados</a><a href="#estadisticas">Estadísticas</a><a href="#historial">Historial</a><a href="#como">Cómo funciona</a></nav>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+<div class="container hero-grid">
+  <div>
+    <span class="eyebrow">PORTAL DOMINICANO DE RESULTADOS</span>
+    <h1>Todos los resultados de loterías en un solo lugar.</h1>
+    <p>Consulta sorteos, números ganadores, historial y estadísticas de las principales loterías que se juegan en República Dominicana.</p>
+    <div class="notice">Los resultados se obtienen mediante el backend de Lottery-RD. La librería realiza web scraping de la fuente de resultados y no garantiza disponibilidad en tiempo real; el portal actualiza automáticamente cuando hay nuevos datos.</div>
+  </div>
+  <div class="datebox">
+    <div class="live">● ESTADO DEL PORTAL</div>
+    <strong id="today"></strong>
+    <div class="muted">Última actualización mostrada: <span id="updated"></span></div>
+    <button style="margin-top:16px" onclick="location.reload()">Actualizar página</button>
+  </div>
+</div>
+</section>
+
+<section class="toolbar">
+<div class="container">
+  <div class="filters">
+    <input id="search" placeholder="Buscar lotería o sorteo..." oninput="render()">
+    <select id="dateFilter" onchange="render()"><option value="latest">Últimos resultados</option><option value="all">Todo el historial disponible</option></select>
+    <select id="operator" onchange="render()"><option value="all">Todas las loterías</option></select>
+    <button class="secondary" onclick="resetFilters()">Limpiar</button>
+  </div>
+</div>
+</section>
+
+<section id="resultados">
+<div class="container">
+<div class="section-title"><div><h2>Resultados de hoy</h2><div class="muted">Principales sorteos dominicanos</div></div><div class="muted" id="resultCount"></div></div>
+<div class="lottery-grid" id="lotteryGrid"></div>
+</div>
+</section>
+
+
+<section id="catalogo">
+<div class="container">
+<div class="section-title"><div><h2>Todos los sorteos disponibles</h2><div class="muted">Catálogo cargado desde Lottery-RD</div></div><div class="muted" id="catalogCount"></div></div>
+<div class="chips" id="catalogChips"></div>
+</div>
+</section>
+<section id="estadisticas">
+<div class="container">
+<div class="section-title"><div><h2>Estadísticas</h2><div class="muted">Indicadores calculados sobre los datos cargados</div></div></div>
+<div class="cards">
+<div class="stat"><small>Sorteos registrados</small><strong id="statDraws">0</strong><span class="up">Base disponible</span></div>
+<div class="stat"><small>Números analizados</small><strong id="statNumbers">0</strong><span class="up">Todos los resultados</span></div>
+<div class="stat"><small>Número más frecuente</small><strong id="statHot">—</strong><span class="up">Frecuencia histórica</span></div>
+<div class="stat"><small>Operadores</small><strong id="statOperators">0</strong><span class="up">Incluidos en la base</span></div>
+</div>
+<div class="two" style="margin-top:18px">
+<div class="chart"><h3>Frecuencia de números</h3><canvas id="freqChart"></canvas></div>
+<div class="chart"><h3>Distribución por operador</h3><canvas id="opChart"></canvas></div>
+</div>
+</div>
+</section>
+
+<section id="historial">
+<div class="container">
+<div class="section-title"><div><h2>Historial de resultados</h2><div class="muted">Filtra, compara y revisa números anteriores</div></div></div>
+<div class="tablewrap">
+<table><thead><tr><th>Fecha</th><th>Operador</th><th>Sorteo</th><th>Números</th></tr></thead><tbody id="historyBody"></tbody></table>
+</div>
+</div>
+</section>
+
+<section id="como">
+<div class="container">
+<div class="section-title"><div><h2>Funciones recomendadas para producción</h2></div></div>
+<div class="lottery-grid">
+<div class="stat"><h3>🔄 Actualización automática</h3><p class="muted">Un backend puede consultar las fuentes autorizadas después de cada sorteo y guardar los resultados.</p></div>
+<div class="stat"><h3>📊 Estadísticas avanzadas</h3><p class="muted">Frecuencia, números calientes/fríos, pares/impares, sumas, repeticiones y tendencias por período.</p></div>
+<div class="stat"><h3>🔎 Buscador inteligente</h3><p class="muted">Busca por número, fecha, operador, tipo de sorteo o combinación.</p></div>
+<div class="stat"><h3>🔔 Alertas</h3><p class="muted">Notificaciones cuando se publique un nuevo resultado o cuando aparezca un número seguido.</p></div>
+<div class="stat"><h3>📱 Diseño móvil</h3><p class="muted">Interfaz adaptable para celulares, tabletas y computadoras.</p></div>
+<div class="stat"><h3>🛡️ Transparencia</h3><p class="muted">Cada resultado debe conservar fuente, hora de publicación y sello de actualización.</p></div>
+</div>
+</div>
+</section>
+</main>
+
+<footer>
+<div class="container footergrid">
+<div><div class="footer-title">Loterías RD</div><div>Portal informativo para consultar resultados y estadísticas. Los resultados oficiales deben verificarse con el operador correspondiente.</div></div>
+<div><div class="footer-title">Secciones</div><div>Resultados<br>Estadísticas<br>Historial</div></div>
+<div><div class="footer-title">Aviso</div><div>No ofrece garantías de predicción. Juega de forma responsable.</div></div>
+</div>
+</footer>
+
+<script>
+const API_BASE = "https://pptonanntevatndjyzmk.supabase.co/functions/v1/loterias-api";
+let data = [];
+let apiStatus = "Conectando…";
+
+function normalizeResult(r){
+  const op = r.compania || r.op || r.operator || r.loteria || r.lottery || "Lotería";
+  const name = r.sorteo_nombre || r.name || r.sorteo || r.draw || r.tipo || "Resultado";
+  let nums = r.numeros ?? r.numbers ?? r.resultado ?? r.nums ?? [];
+  if (typeof nums === "string") nums = nums.replace(/[-,|]/g, " ").split(/\s+/).filter(Boolean);
+  nums = Array.isArray(nums) ? nums.map(String) : [];
+  return {
+    id: r.id || `${op}-${name}-${r.fecha || r.date || ""}-${r.hora || r.time || ""}`,
+    op, name,
+    time: r.hora || r.time || "",
+    nums,
+    date: String(r.fecha || r.date || "").slice(0,10),
+    source: r.fuente || r.source || "",
+    slug: r.sorteo_slug || r.slug || ""
+  };
+}
+
+async function loadFromAPI(){
+  const live = document.querySelector(".live");
+  try{
+    live.textContent = "● CONECTANDO CON DATOS EN VIVO…";
+    const res = await fetch(API_BASE, {
+      method: "GET",
+      cache: "no-store",
+      headers: { "Accept": "application/json" }
+    });
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const payload = await res.json();
+    if(!payload.ok) throw new Error("La API devolvió ok=false");
+
+    const rows = Array.isArray(payload.resultados)
+      ? payload.resultados
+      : (Array.isArray(payload.results) ? payload.results : []);
+
+    const normalized = rows.map(normalizeResult).filter(x => x.nums.length);
+    const grouped = {};
+    normalized.forEach(d => {
+      if(!grouped[d.op]) grouped[d.op] = {op:d.op, draws:[]};
+      grouped[d.op].draws.push(d);
+    });
+
+    data = Object.values(grouped);
+    updateOperatorOptions();
+    render();
+
+    const stamp = new Date();
+    const apiCount = Number(payload.count ?? normalized.length);
+    live.textContent = `● DATOS EN VIVO · ${apiCount} RESULTADOS · ${stamp.toLocaleTimeString("es-DO",{hour:"2-digit",minute:"2-digit"})}`;
+    document.getElementById("updated").textContent = stamp.toLocaleTimeString("es-DO",{hour:"2-digit",minute:"2-digit"});
+  }catch(err){
+    console.error("Error conectando con la API de Supabase:", err);
+    live.textContent = "● ERROR DE CONEXIÓN CON LA API";
+  }
+}
+
+
+function renderCatalog(){
+  const el=document.getElementById("catalogChips");
+  if(!el) return;
+  const names=[...new Set(allDraws().map(d=>d.name).filter(Boolean))].sort();
+  el.innerHTML=names.map(n=>`<span class="chip">${n}</span>`).join("");
+  const c=document.getElementById("catalogCount"); if(c) c.textContent=`${names.length} sorteos`;
+}
+
+const allDraws=()=>data.flatMap(x=>x.draws.map(d=>({...d,op:x.op})));
+function fmtDate(s){return new Date(s+"T12:00:00").toLocaleDateString("es-DO",{day:"2-digit",month:"long",year:"numeric"})}
+function render(){
+ const q=document.getElementById("search").value.toLowerCase().trim(), op=document.getElementById("operator").value;
+ const filtered=data.filter(x=>(op==="all"||x.op===op)).map(x=>({...x,draws:x.draws.filter(d=>(x.op+" "+d.name+" "+d.nums.join(" ")).toLowerCase().includes(q))})).filter(x=>x.draws.length);
+ const grid=document.getElementById("lotteryGrid");grid.innerHTML="";
+ filtered.forEach(x=>{
+  const el=document.createElement("article");el.className="lottery";
+  el.innerHTML=`<div class="lot-head"><strong>${x.op}</strong><span class="badge">${x.draws.length} sorteos</span></div><div class="results">${x.draws.map(d=>`<div class="draw"><div class="draw-top"><span class="draw-name">${d.name}</span><span class="time">${fmtDate(d.date)} ${d.time}</span></div><div class="numbers">${d.nums.map((n,i)=>`<span class="ball ${i===0?'main':''}">${n}</span>`).join("")}</div></div>`).join("")}</div>`;
+  grid.appendChild(el);
+ });
+ document.getElementById("resultCount").textContent=allDraws().filter(d=>(op==="all"||d.op===op)&&(d.op+" "+d.name+" "+d.nums.join(" ")).toLowerCase().includes(q)).length+" sorteos";
+ const rows=allDraws().filter(d=>(op==="all"||d.op===op)&&(d.op+" "+d.name+" "+d.nums.join(" ")).toLowerCase().includes(q));
+ document.getElementById("historyBody").innerHTML=rows.map(d=>`<tr><td>${fmtDate(d.date)}</td><td><b>${d.op}</b></td><td>${d.name}</td><td><div class="chips">${d.nums.map(n=>`<span class="chip">${n}</span>`).join("")}</div></td></tr>`).join("");
+ updateStats(rows);
+}
+function updateStats(rows){
+ const nums=rows.flatMap(d=>d.nums), freq={};nums.forEach(n=>freq[n]=(freq[n]||0)+1);
+ const hot=Object.entries(freq).sort((a,b)=>b[1]-a[1])[0];
+ document.getElementById("statDraws").textContent=rows.length;
+ document.getElementById("statNumbers").textContent=nums.length;
+ document.getElementById("statHot").textContent=hot?`${hot[0]} (${hot[1]})`:"—";
+ document.getElementById("statOperators").textContent=new Set(rows.map(d=>d.op)).size;
+ drawCharts(freq,rows);
+}
+function drawCharts(freq,rows){
+ const c=document.getElementById("freqChart"),ctx=c.getContext("2d"),w=c.width=c.clientWidth*2,h=c.height=270*2;
+ ctx.clearRect(0,0,w,h);const top=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,12),max=Math.max(...top.map(x=>x[1]),1),bw=w/top.length*.62;
+ top.forEach((x,i)=>{let bh=(x[1]/max)*(h-65),x0=i*w/top.length+w/top.length*.19;ctx.fillStyle="#0f766e";ctx.fillRect(x0,h-35-bh,bw,bh);ctx.fillStyle="#334155";ctx.font="24px Arial";ctx.textAlign="center";ctx.fillText(x[0],x0+bw/2,h-8);});
+ const o=document.getElementById("opChart"),oc=o.getContext("2d"),ow=o.width=o.clientWidth*2,oh=o.height=270*2;oc.clearRect(0,0,ow,oh);
+ const counts={};rows.forEach(r=>counts[r.op]=(counts[r.op]||0)+1);const vals=Object.entries(counts),total=rows.length||1;let angle=-Math.PI/2,cx=ow/2,cy=oh/2,r=Math.min(ow,oh)*.30;
+ vals.forEach((v,i)=>{let a=v[1]/total*Math.PI*2;oc.beginPath();oc.moveTo(cx,cy);oc.arc(cx,cy,r,angle,angle+a);oc.closePath();oc.fillStyle=["#0f766e","#14b8a6","#f59e0b","#3b82f6","#8b5cf6"][i%5];oc.fill();angle+=a});
+}
+function resetFilters(){document.getElementById("search").value="";document.getElementById("operator").value="all";render()}
+function updateOperatorOptions(){
+  const select=document.getElementById("operator");
+  const current=select.value;
+  select.innerHTML='<option value="all">Todas las loterías</option>';
+  [...new Set(data.map(x=>x.op))].sort().forEach(x=>select.insertAdjacentHTML("beforeend",`<option value="${x}">${x}</option>`));
+  if([...select.options].some(o=>o.value===current)) select.value=current;
+}
+const now=new Date();
+document.getElementById("today").textContent=now.toLocaleDateString("es-DO",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+document.getElementById("updated").textContent="esperando API";
+render();
+renderCatalog();
+loadFromAPI();
+setInterval(loadFromAPI, 5*60*1000);
+window.addEventListener("resize",()=>render());
+</script>
+</body>
+</html>
